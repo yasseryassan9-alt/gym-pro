@@ -265,6 +265,7 @@ document.addEventListener("DOMContentLoaded", function () {
     ===================================================== */
 
     let appHasStarted = false;
+   authScreen.classList.add("loading");
 
 
     async function enterApp(user) {
@@ -300,7 +301,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const session =
                 result && result.data
                     ? result.data.session
-                    : null;
+                    : null;authScreen.classList.remove("loading");
 
             if (session && session.user) {
                 enterApp(session.user);
