@@ -429,6 +429,9 @@ if (forgotPasswordLink) {
     }
 
 
+    const isRecoveryLink =
+        window.location.hash.includes("type=recovery");
+
     supabaseClient.auth
         .getSession()
         .then(function (result) {
@@ -436,9 +439,11 @@ if (forgotPasswordLink) {
             const session =
                 result && result.data
                     ? result.data.session
-                    : null;authScreen.classList.remove("loading");
+                    : null;
 
-            if (session && session.user) {
+            authScreen.classList.remove("loading");
+
+            if (session && session.user && !isRecoveryLink) {
                 enterApp(session.user);
             }
 
