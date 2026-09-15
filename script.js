@@ -175,9 +175,18 @@ const forgotPasswordLink =
             const password =
                 document.getElementById("signupPassword").value;
 
+            if (password.length < 6) {
+                showAuthError("كلمة المرور يجب أن تكون 6 أحرف على الأقل");
+                return;
+            }
+
+            if (!/[a-zA-Z]/.test(password) || !/[0-9]/.test(password)) {
+                showAuthError("كلمة المرور يجب أن تحتوي على أحرف وأرقام معاً");
+                return;
+            }
+
             signupSubmit.disabled = true;
             signupSubmit.textContent = "جاري إنشاء الحساب...";
-
             try {
 
                 const { data, error } =
