@@ -88,7 +88,7 @@
                     <input
                         type="text"
                         id="signupName"
-                        placeholder="مثلاً محمد"
+                        placeholder="مثلاً "
                         required
                         autocomplete="name"
                     >
@@ -122,7 +122,37 @@
                 </button>
 
             </form>
+<form class="auth-form" id="resetPasswordForm">
 
+    <label>
+        كلمة المرور الجديدة
+        <input
+            type="password"
+            id="newPassword"
+            placeholder="6 أحرف على الأقل"
+            required
+            minlength="6"
+            autocomplete="new-password"
+        >
+    </label>
+
+    <label>
+        تأكيد كلمة المرور
+        <input
+            type="password"
+            id="confirmPassword"
+            placeholder="أعد كتابة كلمة المرور"
+            required
+            minlength="6"
+            autocomplete="new-password"
+        >
+    </label>
+
+    <button type="submit" class="primary-btn auth-submit" id="resetPasswordSubmit">
+        حفظ كلمة المرور الجديدة
+    </button>
+
+</form>
         </div>
 
     </div>
