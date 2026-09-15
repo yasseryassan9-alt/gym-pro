@@ -46,7 +46,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const logoutBtn =
         document.getElementById("logoutBtn");
-
+const forgotPasswordLink =
+        document.getElementById("forgotPasswordLink");
 
     function showAuthError(message) {
 
@@ -259,7 +260,49 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
+if (forgotPasswordLink) {
 
+        forgotPasswordLink.addEventListener("click", async function (event) {
+
+            event.preventDefault();
+
+            const email =
+                document.getElementById("loginEmail").value.trim();
+
+            if (!email) {
+                showAuthError("اكتب بريدك الإلكتروني بالخانة فوق أولاً");
+                return;
+            }
+
+            try {
+
+                const { error } =
+                    await supabaseClient.auth.resetPasswordForEmail(email);
+
+                if (error) {
+                    throw error;
+                }
+
+                showAuthHint(
+                    "تم إرسال رابط إعادة تعيين كلمة المرور لبريدك ✅"
+                );
+
+            } catch (error) {
+
+                showAuthError(
+                    "تعذر إرسال الرابط، تأكد من البريد الإلكتروني"
+                );
+
+            }
+
+        });
+
+    }
+
+
+    /* =====================================================
+       AUTH - التنقل بين الشاشات
+    ===================================================== */
     /* =====================================================
        AUTH - التنقل بين الشاشات
     ===================================================== */
