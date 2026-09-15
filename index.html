@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>GYM PRO</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- مكتبة Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+    <!-- إعدادات مشروع Supabase -->
+    <script src="supabase-config.js"></script>
+
+    <!-- تشغيل JavaScript بعد تحميل HTML -->
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+
+    <!-- ================= AUTH SCREEN ================= -->
+
+    <div class="auth-screen" id="authScreen">
+
+        <div class="auth-box">
+
+            <div class="auth-logo">
+                <div class="logo-icon">🏋️</div>
+
+                <div>
+                    <h1>GYM <span>PRO</span></h1>
+                    <small>مدربك الذكي</small>
+                </div>
+            </div>
+
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-auth-tab="login">
+                    تسجيل الدخول
+                </button>
+                <button class="auth-tab" data-auth-tab="signup">
+                    إنشاء حساب
+                </button>
+            </div>
+
+            <div class="auth-error" id="authError"></div>
+            <div class="auth-hint" id="authHint"></div>
+
+            <!-- LOGIN FORM -->
+            <form class="auth-form active" id="loginForm">
+
+                <label>
+                    البريد الإلكتروني
+                    <input
+                        type="email"
+                        id="loginEmail"
+                        placeholder="example@email.com"
+                        required
+                        autocomplete="email"
+                    >
+                </label>
+
+                <label>
+                    كلمة المرور
+                    <input
+                        type="password"
+                        id="loginPassword"
+                        placeholder="••••••••"
+                        required
+                        autocomplete="current-password"
+                    >
+                </label>
+
+                <button type="submit" class="primary-btn auth-submit" id="loginSubmit">
+                    تسجيل الدخول
+                </button>
+
+            </form>
+
+            <!-- SIGNUP FORM -->
+            <form class="auth-form" id="signupForm">
+
+                <label>
+                    الاسم
+                    <input
+                        type="text"
+                        id="signupName"
+                        placeholder="مثلاً محمد"
+                        required
+                        autocomplete="name"
+                    >
+                </label>
+
+                <label>
+                    البريد الإلكتروني
+                    <input
+                        type="email"
+                        id="signupEmail"
+                        placeholder="example@email.com"
+                        required
+                        autocomplete="email"
+                    >
+                </label>
+
+                <label>
+                    كلمة المرور
+                    <input
+                        type="password"
+                        id="signupPassword"
+                        placeholder="6 أحرف على الأقل"
+                        required
+                        minlength="6"
+                        autocomplete="new-password"
+                    >
+                </label>
+
+                <button type="submit" class="primary-btn auth-submit" id="signupSubmit">
+                    إنشاء حساب
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= APP SHELL ================= -->
+
+    <div id="appShell">
+
+    <!-- الشريط الجانبي -->
+    <aside class="sidebar" id="sidebar">
+
+        <div class="logo">
+            <div class="logo-icon">🏋️</div>
+
+            <div>
+                <h1>GYM <span>PRO</span></h1>
+                <small>مدربك الذكي</small>
+            </div>
+        </div>
+
+        <nav>
+
+            <button class="nav-item active" data-page="home">
+                🏠
+                <span>الرئيسية</span>
+            </button>
+
+            <button class="nav-item" data-page="machines">
+                🏋️
+                <span>الماكينات</span>
+            </button>
+
+            <button class="nav-item" data-page="exercises">
+                💪
+                <span>التمارين</span>
+            </button>
+
+            <button class="nav-item" data-page="programs">
+                📋
+                <span>البرامج</span>
+            </button>
+
+            <button class="nav-item" data-page="progress">
+                📈
+                <span>تقدمي</span>
+            </button>
+
+            <button class="nav-item" data-page="settings">
+                ⚙️
+                <span>الإعدادات</span>
+            </button>
+
+        </nav>
+
+        <div class="user-box">
+            <div class="avatar" id="userAvatar">M</div>
+
+            <div>
+                <strong id="userName">محمد</strong>
+                <small id="userEmail">عضو الجيم</small>
+            </div>
+
+            <button class="logout-btn" id="logoutBtn" title="تسجيل الخروج">
+                ⏻
+            </button>
+        </div>
+
+    </aside>
+
+
+    <!-- الهيدر للموبايل -->
+    <header class="mobile-header">
+
+        <button id="menuButton">☰</button>
+
+        <strong>GYM <span>PRO</span></strong>
+
+        <button data-page="settings">⚙️</button>
+
+    </header>
+
+
+    <div id="overlay"></div>
+
+
+    <!-- المحتوى الرئيسي -->
+    <main class="main-content">
+
+
+        <!-- ================= HOME ================= -->
+
+        <section class="page active" id="home">
+
+            <div class="top-header">
+
+                <div>
+                    <p>أهلاً محمد 👋</p>
+
+                    <h2>جاهز لتمرين اليوم؟</h2>
+
+                    <span>
+                        ابدأ تمرينك وخلينا نحقق هدفك 💪
+                    </span>
+                </div>
+
+                <button class="primary-btn" data-page="exercises">
+                    🔥 ابدأ التمرين
+                </button>
+
+            </div>
+
+
+            <div class="stats">
+
+                <div class="stat">
+                    <div class="stat-icon">🔥</div>
+
+                    <div>
+                        <small>تمارين هذا الأسبوع</small>
+                        <strong id="weekCount">0</strong>
+                    </div>
+                </div>
+
+
+                <div class="stat">
+                    <div class="stat-icon">💪</div>
+
+                    <div>
+                        <small>إجمالي التمارين</small>
+                        <strong id="totalCount">0</strong>
+                    </div>
+                </div>
+
+
+                <div class="stat">
+                    <div class="stat-icon">🏆</div>
+
+                    <div>
+                        <small>الأرقام القياسية</small>
+                        <strong id="prCount">0</strong>
+                    </div>
+                </div>
+
+
+                <div class="stat">
+                    <div class="stat-icon">⏱️</div>
+
+                    <div>
+                        <small>وقت التمرين</small>
+                        <strong id="timeCount">0 دقيقة</strong>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="home-grid">
+
+                <div class="hero">
+
+                    <div>
+
+                        <span class="badge">
+                            💪 تمرين اليوم
+                        </span>
+
+                        <h3>
+                            تمرين كامل للجسم
+                        </h3>
+
+                        <p>
+                            برنامج تدريبي مناسب للمبتدئين
+                            لبناء القوة وتحسين اللياقة.
+                        </p>
+
+                        <button
+                            class="primary-btn"
+                            data-program="fullbody"
+                        >
+                            ابدأ البرنامج
+                        </button>
+
+                    </div>
+
+                    <div class="hero-image">
+                        🏋️‍♂️
+                    </div>
+
+                </div>
+
+
+                <div class="quick-card">
+
+                    <h3>اختصارات سريعة</h3>
+
+                    <button class="quick" data-page="machines">
+                        <span>🏋️</span>
+
+                        <div>
+                            <strong>شرح الماكينات</strong>
+                            <small>تعلم الاستخدام الصحيح</small>
+                        </div>
+
+                        <b>←</b>
+                    </button>
+
+
+                    <button class="quick" data-page="exercises">
+                        <span>💪</span>
+
+                        <div>
+                            <strong>التمارين</strong>
+                            <small>تمارين حسب العضلة</small>
+                        </div>
+
+                        <b>←</b>
+                    </button>
+
+
+                    <button class="quick" data-page="progress">
+                        <span>📈</span>
+
+                        <div>
+                            <strong>تقدمي</strong>
+                            <small>تابع إنجازاتك</small>
+                        </div>
+
+                        <b>←</b>
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="panel">
+
+                <div class="panel-title">
+
+                    <div>
+                        <h3>آخر التمارين</h3>
+                        <small>سجل تمارينك السابقة</small>
+                    </div>
+
+                    <button data-page="progress">
+                        عرض الكل
+                    </button>
+
+                </div>
+
+                <div id="recentList"></div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= MACHINES ================= -->
+
+        <section class="page" id="machines">
+
+            <div class="page-title">
+
+                <p>دليل الجيم</p>
+
+                <h2>الماكينات 🏋️</h2>
+
+                <span>
+                    تعلم كيفية استخدام أجهزة الجيم بالطريقة الصحيحة.
+                </span>
+
+            </div>
+
+
+            <div class="toolbar">
+
+                <input
+                    type="text"
+                    id="machineSearch"
+                    placeholder="🔍 ابحث عن ماكينة..."
+                >
+
+                <select id="machineFilter">
+
+                    <option value="all">
+                        كل الماكينات
+                    </option>
+
+                    <option value="chest">
+                        صدر
+                    </option>
+
+                    <option value="back">
+                        ظهر
+                    </option>
+
+                    <option value="legs">
+                        أرجل
+                    </option>
+
+                    <option value="shoulders">
+                        أكتاف
+                    </option>
+
+                    <option value="arms">
+                        ذراع
+                    </option>
+
+                    <option value="cardio">
+                        كارديو
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div
+                class="cards"
+                id="machinesContainer"
+            ></div>
+
+        </section>
+
+
+
+        <!-- ================= EXERCISES ================= -->
+
+        <section class="page" id="exercises">
+
+            <div class="page-title">
+
+                <p>مكتبة التمارين</p>
+
+                <h2>التمارين 💪</h2>
+
+                <span>
+                    اختر العضلة التي تريد تدريبها.
+                </span>
+
+            </div>
+
+
+            <div class="filters">
+
+                <button
+                    class="filter active"
+                    data-muscle="all"
+                >
+                    الكل
+                </button>
+
+                <button
+                    class="filter"
+                    data-muscle="chest"
+                >
+                    🫁 صدر
+                </button>
+
+                <button
+                    class="filter"
+                    data-muscle="back"
+                >
+                    🦍 ظهر
+                </button>
+
+                <button
+                    class="filter"
+                    data-muscle="shoulders"
+                >
+                    🔥 أكتاف
+                </button>
+
+                <button
+                    class="filter"
+                    data-muscle="biceps"
+                >
+                    💪 بايسبس
+                </button>
+
+                <button
+                    class="filter"
+                    data-muscle="triceps"
+                >
+                    💪 ترايسبس
+                </button>
+
+                <button
+                    class="filter"
+                    data-muscle="legs"
+                >
+                    🦵 أرجل
+                </button>
+
+                <button
+                    class="filter"
+                    data-muscle="abs"
+                >
+                    🎯 بطن
+                </button>
+
+            </div>
+
+
+            <div
+                class="cards"
+                id="exercisesContainer"
+            ></div>
+
+        </section>
+
+
+
+        <!-- ================= PROGRAMS ================= -->
+
+        <section class="page" id="programs">
+
+            <div class="page-title">
+
+                <p>خطط تدريبية</p>
+
+                <h2>برامج التمرين 📋</h2>
+
+                <span>
+                    اختر البرنامج المناسب لهدفك.
+                </span>
+
+            </div>
+
+
+            <div
+                class="programs"
+                id="programsContainer"
+            ></div>
+
+        </section>
+
+
+
+        <!-- ================= PROGRESS ================= -->
+
+        <section class="page" id="progress">
+
+            <div class="page-title">
+
+                <p>إنجازاتك</p>
+
+                <h2>تقدمي 📈</h2>
+
+                <span>
+                    تابع تاريخ تمارينك وإنجازاتك.
+                </span>
+
+            </div>
+
+
+            <div class="progress-stats">
+
+                <div>
+                    <small>التمارين</small>
+                    <strong id="progressCount">0</strong>
+                </div>
+
+                <div>
+                    <small>الوقت</small>
+                    <strong id="progressMinutes">
+                        0 دقيقة
+                    </strong>
+                </div>
+
+                <div>
+                    <small>PR</small>
+                    <strong id="progressPR">0</strong>
+                </div>
+
+            </div>
+
+
+            <div class="panel">
+
+                <div class="panel-title">
+
+                    <div>
+                        <h3>سجل التمارين</h3>
+                    </div>
+
+                    <button
+                        class="danger-btn"
+                        id="clearHistory"
+                    >
+                        مسح السجل
+                    </button>
+
+                </div>
+
+                <div id="historyList"></div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= SETTINGS ================= -->
+        <section class="page" id="settings">
+
+            <div class="page-title">
+
+                <p>الإعدادات</p>
+
+                <h2>الإعدادات ⚙️</h2>
+
+                <span>
+                    تحكم بتفضيلات التطبيق.
+                </span>
+
+            </div>
+
+
+            <div class="panel settings">
+
+                <div class="setting">
+
+                    <div>
+                        <strong>الوضع الداكن</strong>
+
+                        <small>
+                            واجهة مناسبة للجيم.
+                        </small>
+                    </div>
+
+                    <label class="switch">
+
+                        <input
+                            type="checkbox"
+                            id="darkToggle"
+                            checked
+                        >
+
+                        <span></span>
+
+                    </label>
+
+                </div>
+
+
+                <div class="setting">
+
+                    <div>
+                        <strong>الإشعارات</strong>
+
+                        <small>
+                            تفعيل إشعارات التمرين.
+                        </small>
+                    </div>
+
+                    <label class="switch">
+
+                        <input
+                            type="checkbox"
+                            id="notificationToggle"
+                            checked
+                        >
+
+                        <span></span>
+
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <!-- USER PROFILE -->
+            <div class="profile-card">
+                <div class="profile-title">
+                    <div class="profile-icon">👤</div>
+                    <div>
+                        <h3>ملفي الرياضي</h3>
+                        <p>معلوماتك الأساسية وأهدافك</p>
+                    </div>
+                </div>
+
+                <div class="profile-grid">
+
+                    <label>
+                        الاسم
+                        <input
+                            type="text"
+                            id="profileName"
+                            placeholder="مثلاً محمد"
+                        >
+                    </label>
+
+                    <label>
+                        العمر
+                        <input
+                            type="number"
+                            id="profileAge"
+                            min="10"
+                            max="100"
+                            placeholder="مثلاً 20"
+                        >
+                    </label>
+
+                    <label>
+                        الطول (سم)
+                        <input
+                            type="number"
+                            id="profileHeight"
+                            min="100"
+                            max="250"
+                            placeholder="مثلاً 175"
+                        >
+                    </label>
+
+                    <label>
+                        الوزن (كغ)
+                        <input
+                            type="number"
+                            id="profileWeight"
+                            min="20"
+                            max="300"
+                            step="0.1"
+                            placeholder="مثلاً 75"
+                        >
+                    </label>
+
+                </div>
+
+                <div class="goal-title">
+                    🎯 هدفك الحالي
+                </div>
+
+                <div class="goal-options">
+
+                    <button
+                        type="button"
+                        class="goal-option"
+                        data-goal="muscle"
+                    >
+                        💪
+                        <strong>بناء العضلات</strong>
+                        <small>زيادة الكتلة العضلية</small>
+                    </button>
+
+                    <button
+                        type="button"
+                        class="goal-option"
+                        data-goal="fatloss"
+                    >
+                        🔥
+                        <strong>خسارة الدهون</strong>
+                        <small>تنشيف وتحسين الجسم</small>
+                    </button>
+
+                    <button
+                        type="button"
+                        class="goal-option"
+                        data-goal="fitness"
+                    >
+                        🏃
+                        <strong>اللياقة</strong>
+                        <small>تحسين اللياقة والنشاط</small>
+                    </button>
+
+                </div>
+
+                <button
+                    type="button"
+                    id="saveProfile"
+                    class="primary-btn"
+                >
+                    💾 حفظ بياناتي
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- ================= MODAL ================= -->
+
+    <div id="modal" class="modal">
+
+        <div
+            class="modal-background"
+            data-close
+        ></div>
+
+        <div class="modal-box">
+
+            <button
+                class="close-modal"
+                data-close
+            >
+                ×
+            </button>
+
+            <div id="modalContent"></div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ================= TOAST ================= -->
+
+    <div id="toast">
+        <span>✓</span>
+        <strong id="toastText"></strong>
+    </div>
+
+    </div> <!-- end #appShell -->
+
+</body>
+</html>
