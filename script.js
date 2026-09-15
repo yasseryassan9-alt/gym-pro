@@ -48,7 +48,10 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("logoutBtn");
 const forgotPasswordLink =
         document.getElementById("forgotPasswordLink");
-
+const resetPasswordForm =
+        document.getElementById("resetPasswordForm");
+   const resetPasswordSubmit =
+        document.getElementById("resetPasswordSubmit");
     function showAuthError(message) {
 
         if (!authError) return;
@@ -316,7 +319,87 @@ if (forgotPasswordLink) {
        AUTH - التنقل بين الشاشات
     ===================================================== */
 
-    let appHasStarted = false;
+    let appHasStarted = false;/* =====================================================
+       AUTH - استرجاع كلمة المرور
+    ===================================================== */
+
+    supabaseClient.auth.onAuthStateChange(function (event, session) {
+
+        if (event === "PASSWORD_RECOVERY") {
+
+            document.querySelectorAll(".auth-tab").forEach(function (t) {
+                t.style.display = "none";
+            });
+
+            document.getElementById("loginForm").classList.remove("active");
+            document.getElementById("signupForm").classList.remove("active");
+            resetPasswordForm.classList.add("active");
+
+        }
+
+    });
+
+    if (resetPasswordForm) {
+
+        resetPasswordForm.addEventListener("submit", async function (event) {
+
+            event.preventDefault();
+            clearAuthMessages();
+
+            const newPassword =
+                document.getElementById("newPassword").value;
+
+            const confirmPassword =
+                document.getElementById("confirmPassword").value;
+
+            if (newPassword.length < 6) {
+                showAuthError("كلمة المرور يجب أن تكون 6 أحرف على الأقل");
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                showAuthError("كلمة المرورين غير متطابقتين");
+                return;
+            }
+
+            resetPasswordSubmit.disabled = true;
+            resetPasswordSubmit.textContent = "جاري الحفظ...";
+
+            try {
+
+                const { error } =
+                    await supabaseClient.auth.updateUser({
+                        password: newPassword
+                    });
+
+                if (error) {
+                    throw error;
+                }
+
+                showAuthHint("تم تغيير كلمة المرور بنجاح ✅ سجل دخولك الآن");
+
+                resetPasswordForm.classList.remove("active");
+                document.getElementById("loginForm").classList.add("active");
+
+                document.querySelectorAll(".auth-tab").forEach(function (t) {
+                    t.style.display = "";
+                });
+
+                await supabaseClient.auth.signOut();
+
+            } catch (error) {
+
+                showAuthError("تعذر حفظ كلمة المرور، حاول مجدداً");
+
+            } finally {
+
+                resetPasswordSubmit.disabled = false;
+                resetPasswordSubmit.textContent = "حفظ كلمة المرور الجديدة";
+            }
+
+        });
+
+    }
    authScreen.classList.add("loading");
 
 
