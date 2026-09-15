@@ -2202,6 +2202,8 @@ body.light-mode .hero {
     position: fixed;
     inset: 0;
     z-index: 999;
+   opacity: 1;
+    transition: opacity 0.2s ease;
 
     display: flex;
     align-items: center;
@@ -2378,4 +2380,8 @@ body.light-mode .hero {
 .logout-btn:hover {
     border-color: var(--red);
     color: var(--red);
+}
+.auth-screen.loading {
+    opacity: 0;
+    pointer-events: none;
 }
